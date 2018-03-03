@@ -62,7 +62,7 @@ public abstract class Progression implements OrderedNumberStructure {
 	
 	}
 	
-	public boolean equals(String o) {
+	public boolean equals(Progression o) {
 		return false;
 	}
 	

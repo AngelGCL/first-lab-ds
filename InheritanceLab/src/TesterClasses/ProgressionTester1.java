@@ -13,6 +13,7 @@ public class ProgressionTester1 {
 	public static void main(String[] args) {
 		Progression p; 
 		Progression p2;
+		Progression p3;
 		
 ////		
 //		System.out.println("Testing Fibonaci:"); 
@@ -21,17 +22,19 @@ public class ProgressionTester1 {
 		
 		
 //		System.out.println("\n\n\nTesting Geometric:"); 
-		p2 = new Geometric(2, 3); 
+		p2 = new Arithmetic(2, 3); 
 //		System.out.println(p.getTerm(5));
 //		p.printAllTerms(20);
 //		
 		System.out.println("\n\n\nTesting Arithmetic:"); 
 		p = new Arithmetic(2, 3); 
-		System.out.println(p.getTerm(5));
-		p.printAllTerms(20);
-		System.out.println(p2.equals(p2.toString()));
-		
-		
+//		System.out.println(p.getTerm(5));
+//		p.printAllTerms(20);
+		System.out.println(p2.equals(p2));
+//		p3 = ((Arithmetic) p).add((Arithmetic) p2);
+//		p3.printAllTerms(20);
+		p3 = ((Arithmetic) p).substract((Arithmetic) p2);
+		p3.printAllTerms(20);
 	}
 
 }

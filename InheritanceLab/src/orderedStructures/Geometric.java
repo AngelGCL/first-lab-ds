@@ -33,8 +33,8 @@ public class Geometric extends Progression {
 	}
 	
 	@Override
-	public boolean equals(String o) {
-		if(this.toString().equals(o)) {
+	public boolean equals(Progression o) {
+		if(this.toString().equals(o.toString())) {
 			return true;
 		}
 		return false;
