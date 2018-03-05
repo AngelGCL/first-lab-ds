@@ -1,17 +1,22 @@
 package arrayIndexList;
 
+import java.lang.reflect.Array;
+
 import indexList.IndexList;
 
 public class ArrayIndexList<E> implements IndexList<E> {
-	private static final int INITCAP = 5; 
-	private static final int CAPTOAR = 5; 
-	private static final int MAXEMPTYPOS = 10; 
+	private static final int INITCAP = 1; 
+	private static final int CAPTOAR = 1; 
+	private static final int MAXEMPTYPOS = 2; 
 	private E[] element; 
 	private int size; 
+	//value of empty positions in current instance
+	private int empties;
 
 	public ArrayIndexList() { 
 		element = (E[]) new Object[INITCAP]; 
 		size = 0; 
+		empties = INITCAP;
 	} 
 	
 
@@ -20,36 +25,38 @@ public class ArrayIndexList<E> implements IndexList<E> {
 		if(index < 0 || index > size)
 			throw new IndexOutOfBoundsException("add: Invalid index = " + index);
 		
-		if(size == INITCAP){
+		if(size == element.length){
 			changeCapacity(CAPTOAR);
+			empties = empties + CAPTOAR;
 		}
 		
 		if(element[index] != null)
-			moveDataOnePositionTR(index, size);
-		
+			moveDataOnePositionTR(index, size-1);
 		
 		element[index] = e;
-		size = size + 1;
+		size++;
+		empties--;
 	}
 
 
 	public void add(E e) {
 		// ADD CODE AS REQUESTED BY EXERCISES
 		
-		if(size == INITCAP){
+		if(size == element.length){
 			changeCapacity(CAPTOAR);
+			empties = empties + CAPTOAR;
 		}
 		
 		element[size] = e;
-		size = size + 1;
+		size++;
+		empties--;
 	}
 
 
 	public E get(int index) throws IndexOutOfBoundsException {
 		// ADD AND MODIGY CODE AS REQUESTED BY EXERCISES
-		if(index < 0 || index > size)
+		if(index < 0 || index >= size)
 			throw new IndexOutOfBoundsException("get: Invalid index = " + index);
-		
 		
 		return element[index]; 
 	}
@@ -62,21 +69,32 @@ public class ArrayIndexList<E> implements IndexList<E> {
 
 	public E remove(int index) throws IndexOutOfBoundsException {
 		// ADD AND MODIFY CODE AS REQUESTED BY EXERCISES
-		if(index < 0 || index > size)
+		E temp = element[index];
+		if(index < 0 || index >= size)
 			throw new IndexOutOfBoundsException("remove: Invalid index = " + index);
 		
-		size = size - 1;
-		return null;
+		if(index < size)
+			moveDataOnePositionTL(index+1, size-1);
+		
+		if(empties >= MAXEMPTYPOS) {
+			changeCapacity(-CAPTOAR);
+			empties = empties - CAPTOAR;
+		}
+		
+		size--;
+		empties++;
+		return temp;
 	}
 
 
 	public E set(int index, E e) throws IndexOutOfBoundsException {
 		// ADD AND MODIFY CODE AS REQUESTED BY EXERCISES
+		E orig = element[index];
 		if(index < 0 || index > size)
 			throw new IndexOutOfBoundsException("set: Invalid index = " + index);
 		
 		element[index] = e;
-		return null;
+		return orig;
 	}
 
 
@@ -122,14 +140,44 @@ public class ArrayIndexList<E> implements IndexList<E> {
 	// The following two methods are to be implemented as part of an exercise
 	public Object[] toArray() {
 		// TODO es in Exercise 3
-		return null;
+		Object[] arr = new Object[size];
+		int i = 0;
+		for(E e: element) {
+			arr[i] = e;
+			i++;
+		}
+		return arr;
+	}
+
+
+	
+	@Override
+	public <T1> T1[] toArray(T1[] array) {
+		// TODO as in Exercise 3
+		if(array.length < this.size()) {
+			T1[] newInstance = (T1[]) Array.newInstance(array.getClass().getComponentType(), this.size());
+			array = newInstance;
+		}
+		else if(array.length > this.size()) {
+			for(int j=this.size(); j<array.length; j++) {
+				array[j] = null;
+			}
+		}
+		
+		for(int i=0; i<this.size(); i++) {
+			T1 t1 = (T1) element[i];
+			array[i] = t1;
+		}
+
+		return array;
 	}
 
 
 	@Override
-	public <T1> T1[] toArray(T1[] array) {
-		// TODO as in Exercise 3
-		return null;
+	public int capacity() {
+		return element.length;
 	}
+	
+	
 
 }

@@ -59,7 +59,7 @@ public interface IndexList<T> {
 	Object[] toArray(); 
 	<T1> T1[] toArray(T1[] array);
 
-	
-	// int capacity(); 
+	//Returns an int with the value of the current internal length of the array instance
+	int capacity(); 
 
 }
